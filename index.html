@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digroot</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="game-container">
+    <h1>Velkommen til Digroot</h1>
+    <p id="prompt"></p>
+    <input type="number" id="userGuess" placeholder="Skriv den digitale roten her" oninput="handleInput(event)">
+    <p id="feedback"></p>
+    <p id="responseTime">Svartid: </p>
+    <p id="averageTime">Gjennomsnittlig svartid: </p>
+    <button onclick="startGame()">Start</button>
+    <button id="pauseButton" onclick="pauseGame()">Pause</button>
+    <button onclick="stopGame()">Stopp</button>
+    <button onclick="resetAverageTime()">Nullstill gj.snittlig svartid</button>
+    <button onclick="increaseVolume()">Volum +</button>
+    <button onclick="decreaseVolume()">Volum -</button>
+    <button onclick="openSettings()">Innstillinger</button>
+    <button onclick="showInstructions(event)">Bruksanvisning</button>
+  </div>
+
+  <!-- Innstillinger-panel -->
+  <div id="settings-panel" style="display: none;">
+    <h2>Innstillinger</h2>
+    <label for="digitCount">Antall sifre:</label>
+    <input type="number" id="digitCount" min="2" max="8" value="5">
+    
+    <label for="bgColor">Bakgrunnsfarge:</label>
+    <input type="color" id="bgColor" value="#ffffff">
+    
+    <label for="fontSize">Skriftstørrelse:</label>
+    <input type="number" id="fontSize" min="10" max="36" value="16">
+
+    <label for="timeLimit">Tidsbegrensning (sekunder):</label>
+    <input type="number" id="timeLimit" min="5" value="10">
+    
+    <button onclick="applySettings()">Bruk</button>
+    <button onclick="closeSettings()">Lukk</button>
+  </div>
+
+  <!-- Bruksanvisnings-panel -->
+  <div id="instructions-panel" style="display: none;">
+    <h2>Bruksanvisning</h2>
+    <textarea id="instructions-text" readonly>
+      Velkommen til Digroot!
+      Slik spiller du:
+      1. Klikk på "Start" for å begynne.
+      2. Beregn den digitale roten av det viste tallet.
+      3. Skriv inn roten i feltet og få tilbakemelding!
+      </textarea>
+    <button onclick="closeInstructions()">Lukk</button>
+  </div>
+
+  <audio id="correctSound" src="correct.mp3"></audio>
+  <audio id="incorrectSound" src="incorrect.mp3"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
