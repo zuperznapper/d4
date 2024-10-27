@@ -5,9 +5,11 @@ let attempts = 0;
 let totalResponseTime = 0;
 let responseCount = 0;
 let digitCount = 5;
-let timeLimit = 10;
+let timeLimit = 60;
+let questionLimit = 10; // antall spørsmål før pause
 let volume = 0.5;
 let isPaused = false;
+let questionCount = 0; // teller for spørsmål
 
 const correctSound = document.getElementById("correctSound");
 const incorrectSound = document.getElementById("incorrectSound");
@@ -22,6 +24,7 @@ function generateRandomNumber() {
   document.getElementById("prompt").innerText = `Hva er den digitale roten av tallet: ${number}`;
   startTime = new Date().getTime();
   startTimer();
+  questionCount++; // Øk spørsmålteller
   return number;
 }
 
@@ -64,8 +67,12 @@ function handleInput(event) {
     totalResponseTime += responseTime;
     responseCount++;
     document.getElementById("averageTime").innerText = `Gjennomsnittlig svartid: ${Math.round(totalResponseTime / responseCount)} ms`;
-    
-    resetGame();
+
+    if (questionCount >= questionLimit) {
+      triggerAutoPause(); // Start automatisk pause når grensen er nådd
+    } else {
+      resetGame();
+    }
   } else {
     incorrectSound.play();
     feedback.innerText = `Feil! Prøv igjen.`;
@@ -78,10 +85,12 @@ function resetGame() {
   attempts = 0;
   currentNumber = generateRandomNumber();
   document.getElementById("userGuess").value = "";
+  document.getElementById("userGuess").focus(); // Sett fokus i svarfeltet
 }
 
 function startGame() {
   isPaused = false; // Nullstill pause-status
+  questionCount = 0; // Nullstill spørsmålteller
   document.getElementById("pauseButton").innerText = "Pause"; // Sett knappen tilbake til Pause
   document.body.style.backgroundColor = "red";
   document.body.style.color = "black";
@@ -95,6 +104,7 @@ function startGame() {
       clearInterval(countdownTimer);
       document.getElementById("feedback").innerText = "Startet!";
       currentNumber = generateRandomNumber();
+      document.getElementById("userGuess").focus();
     } else {
       document.getElementById("feedback").innerText = `Starter om ${countdown}`;
     }
@@ -102,14 +112,19 @@ function startGame() {
 }
 
 function pauseGame() {
-  isPaused = !isPaused; // Veksle mellom pauset og gjenopptatt status
+  isPaused = !isPaused;
   document.getElementById("feedback").innerText = isPaused ? "Spillet er pauset." : "";
   document.body.style.backgroundColor = isPaused ? "yellow" : "red";
-
-  // Oppdater knappeetiketten til "Fortsett" hvis pauset, ellers "Pause"
   document.getElementById("pauseButton").innerText = isPaused ? "Fortsett" : "Pause";
+  if (!isPaused) startTimer();
+}
 
-  if (!isPaused) startTimer(); // Hvis gjenopptatt, start timeren igjen
+function triggerAutoPause() {
+  isPaused = true;
+  document.getElementById("feedback").innerText = "Automatisk pause.";
+  document.body.style.backgroundColor = "yellow";
+  document.getElementById("pauseButton").innerText = "Fortsett";
+  questionCount = 0;
 }
 
 function stopGame() {
@@ -127,6 +142,13 @@ function showInstructions(event) {
 
   instructionsPanel.style.display = "block";
   instructionsText.readOnly = !isShiftPressed;
+
+  // Last bruksanvisning fra fil
+  fetch('instructions.txt')
+    .then(response => response.text())
+    .then(data => {
+      instructionsText.value = data;
+    });
 }
 
 function closeInstructions() {
@@ -172,6 +194,7 @@ function applySettings() {
   document.getElementById("game-container").style.fontSize = `${fontSize}px`;
 
   timeLimit = parseInt(document.getElementById("timeLimit").value);
+  questionLimit = parseInt(document.getElementById("questionLimit").value);
 
   closeSettings();
 }
