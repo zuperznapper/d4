@@ -5,6 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digroot</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Moderne styling for Digroot */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to bottom right, #f0f9ff, #cfd9df);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #game-container {
+      background-color: #ffffff;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #333;
+    }
+
+    input, button {
+      margin-top: 10px;
+      padding: 12px;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      transition: all 0.3s ease;
+    }
+
+    input {
+      width: calc(100% - 24px);
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #feedback {
+      font-size: 1.2em;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+      transition: color 0.3s ease;
+    }
+
+    #settings-panel, #instructions-panel {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background-color: #f7f9fc;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    #instructions-text {
+      width: 100%;
+      height: 150px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      resize: none;
+      background-color: #f0f0f0;
+    }
+  </style>
 </head>
 <body>
   <div id="game-container">
@@ -12,49 +96,7 @@
     <p id="prompt"></p>
     <input type="number" id="userGuess" placeholder="Skriv den digitale roten her" oninput="handleInput(event)">
     <p id="feedback"></p>
-    <p id="responseTime">Svartid: </p>
-    <p id="averageTime">Gjennomsnittlig svartid: </p>
-    <button onclick="startGame()">Start</button>
-    <button id="pauseButton" onclick="pauseGame()">Pause</button>
-    <button onclick="stopGame()">Stopp</button>
-    <button onclick="resetAverageTime()">Nullstill gj.snittelig svartid</button>
-    <button onclick="increaseVolume()">Volum +</button>
-    <button onclick="decreaseVolume()">Volum -</button>
-    <button onclick="openSettings()">Innstillinger</button>
-    <button onclick="showInstructions(event)">Bruksanvisning</button>
+    <button onclick="submitGuess()">OK</button>
   </div>
-
-  <!-- Innstillinger-panel -->
-  <div id="settings-panel" style="display: none;">
-    <h2>Innstillinger</h2>
-    <label for="digitCount">Antall sifre:</label>
-    <input type="number" id="digitCount" min="2" max="8" value="5">
-    
-    <label for="bgColor">Bakgrunnsfarge:</label>
-    <input type="color" id="bgColor" value="#ffffff">
-    
-    <label for="fontSize">Skriftstørrelse:</label>
-    <input type="number" id="fontSize" min="10" max="36" value="16">
-
-    <label for="timeLimit">Tidsbegrensning (sekunder):</label>
-    <input type="number" id="timeLimit" min="10" value="60">
-
-    <label for="questionLimit">Antall spørsmål før pause:</label>
-    <input type="number" id="questionLimit" min="1" value="10">
-    
-    <button onclick="applySettings()">Bruk</button>
-    <button onclick="closeSettings()">Lukk</button>
-  </div>
-
-  <div id="instructions-panel" style="display: none;">
-    <h2>Bruksanvisning</h2>
-    <textarea id="instructions-text" readonly></textarea>
-    <button onclick="closeInstructions()">Lukk</button>
-  </div>
-
-  <audio id="correctSound" src="correct.mp3"></audio>
-  <audio id="incorrectSound" src="incorrect.mp3"></audio>
-
-  <script src="script.js"></script>
 </body>
 </html>
